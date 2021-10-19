@@ -1,10 +1,13 @@
 import React from "react";
 import { css } from "@emotion/css";
-import { Header, Loader, Button } from "semantic-ui-react";
+import { Header, Loader } from "semantic-ui-react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-import DimensionColumnCard from "./DimensionColumnCard";
-import MeasureColumnCard from "./MeasureColumnCard";
+import ColumnCard from "./ColumnCard";
+import ColumnDropTarget from "./ColumnDropTarget";
 
+import { dragTypes } from "../utils/constants";
 import useGetAllColumns from "../resources/dashboard/useGetAllColumns";
 
 const Dashboard = (): JSX.Element => {
@@ -29,160 +32,74 @@ const Dashboard = (): JSX.Element => {
   );
 
   return (
-    <div
-      className={css`
-        display: grid;
-        grid-template-columns: 250px 1fr;
-      `}
-    >
-      <aside>
-        <div
+    <DndProvider backend={HTML5Backend}>
+      <div
+        className={css`
+          display: grid;
+          grid-template-columns: 250px 1fr;
+        `}
+      >
+        <aside>
+          <div
+            className={css`
+              position: sticky;
+              top: 64px;
+              height: 100%;
+              background-color: #000;
+              color: #fff;
+              padding: 25px 20px;
+            `}
+          >
+            <Header
+              as="h2"
+              className={css`
+                color: #fff !important;
+              `}
+            >
+              Columns
+            </Header>
+            {isColumnsLoading ? (
+              <Loader active indeterminate>
+                Preparing Columns
+              </Loader>
+            ) : (
+              <>
+                {groupedColumns.dimensions.map((column) => (
+                  <ColumnCard
+                    key={column.name}
+                    column={column}
+                    type={dragTypes.dimension}
+                  />
+                ))}
+                {groupedColumns.measures.map((column) => (
+                  <ColumnCard
+                    key={column.name}
+                    column={column}
+                    type={dragTypes.measure}
+                  />
+                ))}
+              </>
+            )}
+          </div>
+        </aside>
+        <main
           className={css`
-            position: sticky;
-            top: 64px;
-            height: 100%;
-            background-color: #000;
-            color: #fff;
             padding: 25px 20px;
           `}
         >
-          <Header
-            as="h2"
-            className={css`
-              color: #fff !important;
-            `}
-          >
-            Columns
-          </Header>
-          {isColumnsLoading ? (
-            <Loader active indeterminate>
-              Preparing Columns
-            </Loader>
-          ) : (
-            <>
-              {groupedColumns.dimensions.map((column) => (
-                <DimensionColumnCard key={column.name} column={column} />
-              ))}
-              {groupedColumns.measures.map((column) => (
-                <MeasureColumnCard key={column.name} column={column} />
-              ))}
-            </>
-          )}
-        </div>
-      </aside>
-      <main
-        className={css`
-          padding: 25px 20px;
-        `}
-      >
-        <div
-          className={css`
-            display: flex;
-            align-items: stretch;
-          `}
-        >
-          <Header
-            as="h4"
-            className={css`
-              margin-bottom: 0 !important;
-              margin-top: 0 !important;
-              margin-right: 35px !important;
-              line-height: 37px !important;
-            `}
-          >
-            Dimension
-          </Header>
-
-          <div
-            className={css`
-              border: 1px solid rgba(34, 36, 38, 0.15);
-              border-right: none;
-              border-top-left-radius: 4px;
-              border-bottom-left-radius: 4px;
-              flex-grow: 1;
-              display: flex;
-              padding: 5px 10px;
-            `}
-          >
-            <div
-              className={css`
-                background-color: #2185d0;
-                color: #fff;
-                padding: 1px 20px;
-                border-radius: 4px;
-                font-weight: bold;
-              `}
-            >
-              Product
-            </div>
-          </div>
-          <Button
-            basic
-            className={css`
-              margin-right: 0 !important;
-              border-top-left-radius: 0 !important;
-              border-bottom-left-radius: 0 !important;
-            `}
-          >
-            Clear
-          </Button>
-        </div>
-
-        <div
-          className={css`
-            display: flex;
-            align-items: stretch;
-            margin-top: 20px;
-          `}
-        >
-          <Header
-            as="h4"
-            className={css`
-              margin-bottom: 0 !important;
-              margin-top: 0 !important;
-              margin-right: 35px !important;
-              line-height: 37px !important;
-            `}
-          >
-            Measures
-          </Header>
-
-          <div
-            className={css`
-              border: 1px solid rgba(34, 36, 38, 0.15);
-              border-right: none;
-              border-top-left-radius: 4px;
-              border-bottom-left-radius: 4px;
-              flex-grow: 1;
-              display: flex;
-              padding: 5px 10px;
-            `}
-          >
-            <div
-              className={css`
-                background-color: #00b5ad;
-                color: #fff;
-                padding: 1px 20px;
-                border-radius: 4px;
-                font-weight: bold;
-              `}
-            >
-              Cost
-            </div>
-          </div>
-          <Button
-            basic
-            className={css`
-              margin-right: 0 !important;
-              border-top-left-radius: 0 !important;
-              border-bottom-left-radius: 0 !important;
-            `}
-          >
-            Clear
-          </Button>
-        </div>
-      </main>
-    </div>
+          <ColumnDropTarget
+            title="Dimension"
+            type={dragTypes.dimension}
+            cardColor="#2185d0"
+          />
+          <ColumnDropTarget
+            title="Measures"
+            type={dragTypes.measure}
+            cardColor="#00b5ad"
+          />
+        </main>
+      </div>
+    </DndProvider>
   );
 };
 
