@@ -10,9 +10,7 @@
   "author": "Andrew Lawendy",
   "license": "MIT",
   "dependencies": {
-    "babel-plugin-react-css-modules": "^5.2.6",
-    "node-sass": "^5.0.0",
-    "postcss-scss": "^3.0.4",
+    "@emotion/css": "^11.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "semantic-ui-css": "^2.4.1",
