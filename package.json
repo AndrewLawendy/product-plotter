@@ -11,9 +11,11 @@
   "license": "MIT",
   "dependencies": {
     "@emotion/css": "^11.5.0",
+    "axios": "^0.23.0",
     "components": "^0.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-query": "^3.27.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3"
   },

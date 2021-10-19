@@ -6,7 +6,7 @@ import Logo from "../assets/logo.png";
 
 const AppHeader = (): JSX.Element => {
   return (
-    <div
+    <header
       className={css`
         position: sticky;
         top: 0;
@@ -36,7 +36,7 @@ const AppHeader = (): JSX.Element => {
       >
         Plotter
       </Header>
-    </div>
+    </header>
   );
 };
 
