@@ -3,13 +3,25 @@ import { css } from "@emotion/css";
 import { Header, Button } from "semantic-ui-react";
 import { useDrop } from "react-dnd";
 
+import { Column } from "../types";
+
 type Props = {
   title: "Dimension" | "Measures";
   type: string;
   cardColor: string;
+  cards: string[];
+  onDrop: (column: Column) => void;
+  onClear: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const ColumnDropTarget = ({ title, type, cardColor }: Props): JSX.Element => {
+const ColumnDropTarget = ({
+  title,
+  type,
+  cardColor,
+  cards,
+  onDrop,
+  onClear,
+}: Props): JSX.Element => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: type,
     drop: onDrop,
@@ -18,10 +30,6 @@ const ColumnDropTarget = ({ title, type, cardColor }: Props): JSX.Element => {
       canDrop: monitor.canDrop(),
     }),
   });
-
-  function onDrop(item) {
-    console.log(item);
-  }
 
   const isActive = isOver && canDrop;
   let backgroundColor = "transparent";
@@ -65,17 +73,21 @@ const ColumnDropTarget = ({ title, type, cardColor }: Props): JSX.Element => {
         `}
         style={{ backgroundColor }}
       >
-        <div
-          className={css`
-            background-color: ${cardColor};
-            color: #fff;
-            padding: 1px 20px;
-            border-radius: 4px;
-            font-weight: bold;
-          `}
-        >
-          Product
-        </div>
+        {cards.map((card, index) => (
+          <div
+            key={`${card}-${index}`}
+            className={css`
+              background-color: ${cardColor};
+              color: #fff;
+              padding: 1px 20px;
+              border-radius: 4px;
+              font-weight: bold;
+              margin-right: 10px;
+            `}
+          >
+            {card}
+          </div>
+        ))}
       </div>
       <Button
         basic
@@ -84,6 +96,9 @@ const ColumnDropTarget = ({ title, type, cardColor }: Props): JSX.Element => {
           border-top-left-radius: 0 !important;
           border-bottom-left-radius: 0 !important;
         `}
+        onClick={() => {
+          if (cards.length > 0) onClear([]);
+        }}
       >
         Clear
       </Button>

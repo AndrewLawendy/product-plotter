@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/css";
 import { Header, Loader } from "semantic-ui-react";
 import { DndProvider } from "react-dnd";
@@ -8,6 +8,7 @@ import ColumnCard from "./ColumnCard";
 import ColumnDropTarget from "./ColumnDropTarget";
 
 import { dragTypes } from "../utils/constants";
+import { Column } from "../types";
 import useGetAllColumns from "../resources/dashboard/useGetAllColumns";
 
 const Dashboard = (): JSX.Element => {
@@ -30,6 +31,16 @@ const Dashboard = (): JSX.Element => {
       measures: [],
     }
   );
+  const [selectedDimension, setSelectedDimension] = useState<string[]>([]);
+  const [selectedMeasures, setSelectedMeasures] = useState<string[]>([]);
+
+  function updateDimension(dimension: Column) {
+    setSelectedDimension([dimension.name]);
+  }
+
+  function updateMeasures(measure: Column) {
+    setSelectedMeasures((measures) => [...measures, measure.name]);
+  }
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -69,6 +80,7 @@ const Dashboard = (): JSX.Element => {
                     key={column.name}
                     column={column}
                     type={dragTypes.dimension}
+                    disabled={selectedDimension.includes(column.name)}
                   />
                 ))}
                 {groupedColumns.measures.map((column) => (
@@ -76,6 +88,7 @@ const Dashboard = (): JSX.Element => {
                     key={column.name}
                     column={column}
                     type={dragTypes.measure}
+                    disabled={selectedMeasures.includes(column.name)}
                   />
                 ))}
               </>
@@ -91,11 +104,17 @@ const Dashboard = (): JSX.Element => {
             title="Dimension"
             type={dragTypes.dimension}
             cardColor="#2185d0"
+            cards={selectedDimension}
+            onDrop={updateDimension}
+            onClear={setSelectedDimension}
           />
           <ColumnDropTarget
             title="Measures"
             type={dragTypes.measure}
             cardColor="#00b5ad"
+            cards={selectedMeasures}
+            onDrop={updateMeasures}
+            onClear={setSelectedMeasures}
           />
         </main>
       </div>

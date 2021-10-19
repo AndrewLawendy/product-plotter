@@ -9,9 +9,10 @@ import { dragTypes } from "../utils/constants";
 type Props = {
   column: Column;
   type: string;
+  disabled: boolean;
 };
 
-const ColumnCard = ({ column, type }: Props): JSX.Element => {
+const ColumnCard = ({ column, type, disabled }: Props): JSX.Element => {
   const [, drag] = useDrag(() => ({
     type,
     item: column,
@@ -27,6 +28,7 @@ const ColumnCard = ({ column, type }: Props): JSX.Element => {
             className={css`
               margin-bottom: 10px !important;
             `}
+            disabled={disabled}
           >
             {column.name}
           </Button>
@@ -36,6 +38,7 @@ const ColumnCard = ({ column, type }: Props): JSX.Element => {
         type === dragTypes.dimension ? "Dimension" : "Measure"
       } card and drop it in the field to see the relevant data`}
       position="right center"
+      disabled={disabled}
     />
   );
 };
