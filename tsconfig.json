@@ -6,7 +6,8 @@
       "~*": ["./*"]
     },
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2016", "DOM"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", ".d.ts"]
 }
