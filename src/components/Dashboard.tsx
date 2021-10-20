@@ -3,10 +3,12 @@ import { css } from "@emotion/css";
 import { Header, Loader, Dimmer } from "semantic-ui-react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { ErrorBoundary } from "react-error-boundary";
 
 import ColumnCard from "./ColumnCard";
 import ColumnDropTarget from "./ColumnDropTarget";
 import DataChart from "./DataChart";
+import ErrorFallback from "./ErrorFallback";
 
 import { dragTypes } from "../utils/constants";
 import { Column } from "../types";
@@ -120,57 +122,65 @@ const Dashboard = (): JSX.Element => {
             padding: 25px 20px;
           `}
         >
-          <ColumnDropTarget
-            title="Dimension"
-            type={dragTypes.dimension}
-            cardColor="#2185d0"
-            cards={selectedDimension}
-            onDrop={updateDimension}
-            onClear={setSelectedDimension}
-          />
-          <ColumnDropTarget
-            title="Measures"
-            type={dragTypes.measure}
-            cardColor="#00b5ad"
-            cards={selectedMeasures}
-            onDrop={updateMeasures}
-            onClear={setSelectedMeasures}
-          />
-
-          <div
-            className={css`
-              width: 100%;
-              height: 635px;
-            `}
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => {
+              setSelectedDimension([]);
+              setSelectedMeasures([]);
+            }}
           >
-            <Dimmer.Dimmable
-              blurring
-              dimmed={chartDimmed}
+            <ColumnDropTarget
+              title="Dimension"
+              type={dragTypes.dimension}
+              cardColor="#2185d0"
+              cards={selectedDimension}
+              onDrop={updateDimension}
+              onClear={setSelectedDimension}
+            />
+            <ColumnDropTarget
+              title="Measures"
+              type={dragTypes.measure}
+              cardColor="#00b5ad"
+              cards={selectedMeasures}
+              onDrop={updateMeasures}
+              onClear={setSelectedMeasures}
+            />
+
+            <div
               className={css`
                 width: 100%;
-                height: 100%;
+                height: 635px;
               `}
             >
-              <DataChart data={columnsData} />
-              <Dimmer inverted active={chartDimmed}>
-                {isColumnsDataLoading ? (
-                  <Loader active indeterminate>
-                    Loading Columns Data
-                  </Loader>
-                ) : (
-                  <Header
-                    as="h3"
-                    className={css`
-                      color: #000 !important;
-                    `}
-                  >
-                    Please choose a dimension and at least one measure to show
-                    chart
-                  </Header>
-                )}
-              </Dimmer>
-            </Dimmer.Dimmable>
-          </div>
+              <Dimmer.Dimmable
+                blurring
+                dimmed={chartDimmed}
+                className={css`
+                  width: 100%;
+                  height: 100%;
+                `}
+              >
+                <DataChart data={columnsData} />
+                <Dimmer inverted active={chartDimmed}>
+                  {isColumnsDataLoading ? (
+                    <Loader active indeterminate>
+                      Loading Columns Data
+                    </Loader>
+                  ) : (
+                    <Header
+                      as="h3"
+                      className={css`
+                        color: #000 !important;
+                      `}
+                    >
+                      Please choose a dimension and at least one measure to show
+                      chart
+                    </Header>
+                  )}
+                </Dimmer>
+              </Dimmer.Dimmable>
+            </div>
+          </ErrorBoundary>
         </main>
       </div>
     </DndProvider>

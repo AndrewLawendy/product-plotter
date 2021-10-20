@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { css } from "@emotion/css";
+
 import "semantic-ui-css/semantic.min.css";
 
 import AppHeader from "./components/AppHeader";
