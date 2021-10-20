@@ -15,11 +15,16 @@ function getColumnsData(params) {
 }
 
 function useGetColumnsData(params: Params): UseQueryResult<Response> {
-  return useQuery(["columnsData", params], () => getColumnsData(params), {
-    refetchOnWindowFocus: false,
-    enabled: params.dimension.length > 0 && params.measures.length > 0,
-    initialData: [],
-  });
+  const { dimension, measures } = params;
+  return useQuery(
+    ["columnsData", dimension, [...measures].sort()],
+    () => getColumnsData(params),
+    {
+      refetchOnWindowFocus: false,
+      enabled: params.dimension.length > 0 && params.measures.length > 0,
+      initialData: [],
+    }
+  );
 }
 
 export default useGetColumnsData;
