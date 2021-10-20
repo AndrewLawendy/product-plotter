@@ -21,7 +21,12 @@ const ColumnCard = ({ column, type, disabled }: Props): JSX.Element => {
   return (
     <Popup
       trigger={
-        <div ref={drag}>
+        <div
+          ref={drag}
+          className={css`
+            pointer-events: ${disabled && "none"};
+          `}
+        >
           <Button
             fluid
             color={type === dragTypes.dimension ? "blue" : "teal"}
