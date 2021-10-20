@@ -18,6 +18,7 @@ function useGetColumnsData(params: Params): UseQueryResult<Response> {
   return useQuery(["columnsData", params], () => getColumnsData(params), {
     refetchOnWindowFocus: false,
     enabled: params.dimension.length > 0 && params.measures.length > 0,
+    initialData: [],
   });
 }
 

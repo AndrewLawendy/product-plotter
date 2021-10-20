@@ -6,6 +6,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import ColumnCard from "./ColumnCard";
 import ColumnDropTarget from "./ColumnDropTarget";
+import DataChart from "./DataChart";
 
 import { dragTypes } from "../utils/constants";
 import { Column } from "../types";
@@ -127,7 +128,7 @@ const Dashboard = (): JSX.Element => {
             onClear={setSelectedMeasures}
           />
 
-          {}
+          <DataChart data={columnsData} />
         </main>
       </div>
     </DndProvider>
