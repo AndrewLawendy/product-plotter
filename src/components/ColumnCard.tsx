@@ -41,7 +41,7 @@ const ColumnCard = ({ column, type, disabled }: Props): JSX.Element => {
       }
       content={`Drag ${
         type === dragTypes.dimension ? "Dimension" : "Measure"
-      } card and drop it in the field to see the relevant data`}
+      } card and drop it in the correspondent field to see the relevant data`}
       position="right center"
       disabled={disabled}
     />
