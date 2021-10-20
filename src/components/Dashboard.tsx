@@ -9,9 +9,21 @@ import ColumnDropTarget from "./ColumnDropTarget";
 
 import { dragTypes } from "../utils/constants";
 import { Column } from "../types";
+
 import useGetAllColumns from "../resources/dashboard/useGetAllColumns";
+import useGetColumnsData from "../resources/dashboard/useGetColumnData";
 
 const Dashboard = (): JSX.Element => {
+  const [selectedDimension, setSelectedDimension] = useState<string[]>([]);
+  const [selectedMeasures, setSelectedMeasures] = useState<string[]>([]);
+
+  const {
+    data: columnsData,
+    isLoading: isColumnsDataLoading,
+  } = useGetColumnsData({
+    dimension: selectedDimension[0] || "",
+    measures: selectedMeasures,
+  });
   const { data: allColumns, isLoading: isColumnsLoading } = useGetAllColumns();
   const groupedColumns = allColumns?.reduce(
     (grouped, column) => {
@@ -31,8 +43,6 @@ const Dashboard = (): JSX.Element => {
       measures: [],
     }
   );
-  const [selectedDimension, setSelectedDimension] = useState<string[]>([]);
-  const [selectedMeasures, setSelectedMeasures] = useState<string[]>([]);
 
   function updateDimension(dimension: Column) {
     setSelectedDimension([dimension.name]);
@@ -116,6 +126,8 @@ const Dashboard = (): JSX.Element => {
             onDrop={updateMeasures}
             onClear={setSelectedMeasures}
           />
+
+          {}
         </main>
       </div>
     </DndProvider>
