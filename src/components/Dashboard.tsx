@@ -65,14 +65,23 @@ const Dashboard = (): JSX.Element => {
           grid-template-columns: 250px 1fr;
         `}
       >
-        <aside>
+        <aside
+          className={css`
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            position: relative;
+          `}
+        >
+          {isColumnsLoading && (
+            <Loader active indeterminate>
+              Preparing Columns
+            </Loader>
+          )}
           <div
             className={css`
               position: sticky;
               top: 64px;
-              height: 100%;
-              background-color: #000;
-              color: #fff;
               padding: 25px 20px;
             `}
           >
@@ -84,11 +93,7 @@ const Dashboard = (): JSX.Element => {
             >
               Columns
             </Header>
-            {isColumnsLoading ? (
-              <Loader active indeterminate>
-                Preparing Columns
-              </Loader>
-            ) : (
+            {!isColumnsLoading && (
               <>
                 {groupedColumns.dimensions.map((column) => (
                   <ColumnCard
@@ -147,7 +152,7 @@ const Dashboard = (): JSX.Element => {
               `}
             >
               <DataChart data={columnsData} />
-              <Dimmer inverted verticalAlign="center" active={chartDimmed}>
+              <Dimmer inverted active={chartDimmed}>
                 {isColumnsDataLoading ? (
                   <Loader active indeterminate>
                     Loading Columns Data

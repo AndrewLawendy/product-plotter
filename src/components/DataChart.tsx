@@ -76,6 +76,8 @@ const DataChart = ({ data = [] }: Props): JSX.Element => {
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
+
+    return () => chart.dispose();
   }, [data]);
 
   return (
