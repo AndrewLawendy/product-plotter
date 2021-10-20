@@ -10,7 +10,7 @@ type Props = {
   data: { name: string; values: number[] | string[] }[];
 };
 
-const DataChart = ({ data }: Props): JSX.Element => {
+const DataChart = ({ data = [] }: Props): JSX.Element => {
   const [dimension, ...measures] = data;
   const chartData = dimension?.values.map((value, index) => {
     const xAxis = { [dimension.name]: value };
@@ -83,7 +83,7 @@ const DataChart = ({ data }: Props): JSX.Element => {
       id="columnsDataChart"
       className={css`
         width: 100%;
-        height: 635px;
+        height: 100%;
       `}
     ></div>
   );

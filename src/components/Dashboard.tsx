@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { css } from "@emotion/css";
-import { Header, Loader } from "semantic-ui-react";
+import { Header, Loader, Dimmer } from "semantic-ui-react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -44,6 +44,10 @@ const Dashboard = (): JSX.Element => {
       measures: [],
     }
   );
+  const chartDimmed =
+    selectedDimension.length === 0 ||
+    selectedMeasures.length === 0 ||
+    isColumnsDataLoading;
 
   function updateDimension(dimension: Column) {
     setSelectedDimension([dimension.name]);
@@ -128,7 +132,40 @@ const Dashboard = (): JSX.Element => {
             onClear={setSelectedMeasures}
           />
 
-          <DataChart data={columnsData} />
+          <div
+            className={css`
+              width: 100%;
+              height: 635px;
+            `}
+          >
+            <Dimmer.Dimmable
+              blurring
+              dimmed={chartDimmed}
+              className={css`
+                width: 100%;
+                height: 100%;
+              `}
+            >
+              <DataChart data={columnsData} />
+              <Dimmer inverted verticalAlign="center" active={chartDimmed}>
+                {isColumnsDataLoading ? (
+                  <Loader active indeterminate>
+                    Loading Columns Data
+                  </Loader>
+                ) : (
+                  <Header
+                    as="h3"
+                    className={css`
+                      color: #000 !important;
+                    `}
+                  >
+                    Please choose a dimension and at least one measure to show
+                    chart
+                  </Header>
+                )}
+              </Dimmer>
+            </Dimmer.Dimmable>
+          </div>
         </main>
       </div>
     </DndProvider>
